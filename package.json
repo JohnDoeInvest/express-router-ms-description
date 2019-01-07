@@ -1,0 +1,23 @@
+{
+  "name": "express-router-ms-description",
+  "version": "1.0.0",
+  "description": "Import and create Express routes from a route description format",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "peerDependencies": {
+    "express": "4.x.x"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "mocha": "^5.2.0",
+    "mocha-sinon": "^2.1.0",
+    "sinon": "^7.2.2",
+    "supertest": "^3.3.0"
+  },
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
