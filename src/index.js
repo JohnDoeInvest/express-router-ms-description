@@ -18,11 +18,14 @@ const ALLOWED_HTTP_METHODS = ["GET", "POST", "PUT", "DELETE", "PATCH"]
  */
 
 /**
+ * @example 
+ * // Returns { "CLIENT": express.Router }
+ * .parse({...}, ["CLIENT"], {...})
  * 
- * @param {RestApiJson} restApiJson 
+ * @param {RestApiJson} restApiJson The restAPI part of the serviceDescription
  * @param {string[]} allowedTypes The allowed types of paths
  * @param {Object} routeHandler A object containing all of the handlers for the routes
- * @return {Object} Object containing a router for each allowed type
+ * @return {Object.<string, express.Router>} Object containing a router for each allowed type
  */
 function parse(restApiJson, allowedTypes, routeHandlers) {
     /** @type {Object.<string, express.Router>} */
