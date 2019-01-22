@@ -9,12 +9,18 @@ const ALLOWED_TYPES = ["CLIENT", "ADMIN", "EXTERNAL"];
 var assert = require('assert');
 describe('ExpressRouterMSDescription', function () {
 
-    beforeEach(function() {
+    function createExpress() {
+        const app = express();
+        app.use(express.json());
+        return app;
+    }
+
+    beforeEach(function () {
         this.sinon.stub(console, 'warn');
     });
 
     describe('One router (CLIENT POST)', function () {
-        const app = express();
+        const app = createExpress();
         const routers = expressRouterMSDescription.parse(
             {
                 pathPrefix: "/authenticate/bankid",
@@ -38,11 +44,12 @@ describe('ExpressRouterMSDescription', function () {
             }
         );
 
-        app.use("/authenticate/bankid", routers.CLIENT);
+        app.use('/', routers.CLIENT);
 
         it('respond with 200', function (done) {
             request(app)
                 .post('/authenticate/bankid/')
+                .send({ ssid: "testSSID" })
                 .expect(200, done);
         });
 
@@ -60,7 +67,7 @@ describe('ExpressRouterMSDescription', function () {
     });
 
     describe('Multiple routers', function () {
-        const app = express();
+        const app = createExpress();
         const routers = expressRouterMSDescription.parse(
             {
                 pathPrefix: "/authenticate/bankid",
@@ -91,12 +98,13 @@ describe('ExpressRouterMSDescription', function () {
             }
         );
 
-        app.use("/client/authenticate/bankid", routers.CLIENT);
-        app.use("/admin/authenticate/bankid", routers.ADMIN);
+        app.use("/client", routers.CLIENT);
+        app.use("/admin", routers.ADMIN);
 
         it('respond with 200 CLIENT', function (done) {
             request(app)
                 .post('/client/authenticate/bankid/')
+                .send({ ssid: "testSSID" })
                 .expect(200, done);
         });
 
@@ -115,7 +123,7 @@ describe('ExpressRouterMSDescription', function () {
 
     describe('Incorrect setups', function () {
         it('failed to add routes, no matching method', function (done) {
-            const app = express();
+            const app = createExpress();
             const routers = expressRouterMSDescription.parse(
                 {
                     pathPrefix: "/authenticate/bankid",
@@ -138,14 +146,14 @@ describe('ExpressRouterMSDescription', function () {
             );
             assert(console.warn.calledWith("Can't find handler function 'handleAuthenticate' for endpoint with method POST and URI /authenticate/bankid/"))
 
-            app.use("/authenticate/bankid", routers.CLIENT);
+            app.use("/", routers.CLIENT);
             request(app)
                 .post('/admin/authenticate/bankid/')
                 .expect(404, done);
         });
 
-        it('fail to add route, method not allowed', function(done) {
-            const app = express();
+        it('fail to add route, method not allowed', function (done) {
+            const app = createExpress();
             const routers = expressRouterMSDescription.parse(
                 {
                     pathPrefix: "/authenticate/bankid",
@@ -170,14 +178,14 @@ describe('ExpressRouterMSDescription', function () {
             );
             assert(console.warn.calledWith("Method not allowed for endpoint with method HEAD and URI /authenticate/bankid/"))
 
-            app.use("/authenticate/bankid", routers.CLIENT);
+            app.use("/", routers.CLIENT);
             request(app)
                 .post('/admin/authenticate/bankid/')
                 .expect(404, done);
         });
 
-        it('fail to add route, method not allowed', function(done) {
-            const app = express();
+        it('fail to add route, method not allowed', function (done) {
+            const app = createExpress();
             const routers = expressRouterMSDescription.parse(
                 {
                     pathPrefix: "/authenticate/bankid",
@@ -202,7 +210,7 @@ describe('ExpressRouterMSDescription', function () {
             );
             assert(console.warn.calledWith("Type not valid for endpoint with method POST and URI /authenticate/bankid/"))
 
-            app.use("/authenticate/bankid", routers.CLIENT);
+            app.use("/", routers.CLIENT);
             request(app)
                 .post('/admin/authenticate/bankid/')
                 .expect(404, done);

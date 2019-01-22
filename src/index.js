@@ -55,7 +55,10 @@ function parse(restApiJson, allowedTypes, routeHandlers) {
             const router = routers[method.type];
             if (ALLOWED_HTTP_METHODS.includes(method.method)) {
                 // Express has all HTTP methods/verbs as functions in lowercase
-                router[method.method.toLowerCase()](key, routeHandlers[method.handlingFunction]);
+                router[method.method.toLowerCase()](
+                    restApiJson.pathPrefix + key,
+                    [parameterCheckHandler(method.parameters), routeHandlers[method.handlingFunction]]
+                );
             } else {
                 console.warn("Method not allowed for endpoint with method " + method.method + " and URI " + restApiJson.pathPrefix + key);
             }
@@ -63,6 +66,25 @@ function parse(restApiJson, allowedTypes, routeHandlers) {
     }
 
     return routers;
+}
+
+/**
+ * Creates a function for 
+ * 
+ * @param {Object} params - The params to check for
+ */
+function parameterCheckHandler(params) {
+    return (req, res, next) => {
+        if (typeof params === 'object') {
+            for (const param of Object.keys(params)) {
+                if (!req.body[param]) {
+                    res.send(500);
+                    return
+                }
+            }
+        }
+        next();
+    };
 }
 
 module.exports.parse = parse;
