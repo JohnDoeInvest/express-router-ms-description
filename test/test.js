@@ -34,13 +34,23 @@ describe('ExpressRouterMSDescription', function () {
                             parameters: {
                                 ssid: "string with Swedish social security number"
                             }
+                        },
+                        {
+                            method: "GET",
+                            type: "CLIENT",
+                            handlingFunction: "getAuthentication",
+                            description: "Gets something",
+                            parameters: {
+                                test: "some test param"
+                            }
                         }
                     ]
                 }
             },
             ALLOWED_TYPES,
             {
-                handleAuthenticate: (req, res, next) => res.sendStatus(200)
+                handleAuthenticate: (req, res, next) => res.sendStatus(200),
+                getAuthentication: (req, res, next) => res.sendStatus(200)
             }
         );
 
@@ -53,9 +63,22 @@ describe('ExpressRouterMSDescription', function () {
                 .expect(200, done);
         });
 
+        it('respond with 200, correct params', function (done) {
+            request(app)
+                .get('/authenticate/bankid?test=hello')
+                .expect(200, done);
+        });
+
+        it('respond with 200, incorrect params', function (done) {
+            request(app)
+                .post('/authenticate/bankid/')
+                .send({ test: "hello" })
+                .expect(500, done);
+        });
+
         it('respond with 404, wrong method', function (done) {
             request(app)
-                .get('/authenticate/bankid/')
+                .put('/authenticate/bankid/')
                 .expect(404, done);
         });
 
@@ -184,7 +207,7 @@ describe('ExpressRouterMSDescription', function () {
                 .expect(404, done);
         });
 
-        it('fail to add route, method not allowed', function (done) {
+        it('fail to add route, type not valid', function (done) {
             const app = createExpress();
             const routers = expressRouterMSDescription.parse(
                 {
