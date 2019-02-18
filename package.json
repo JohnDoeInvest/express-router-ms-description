@@ -1,6 +1,7 @@
 {
   "name": "express-router-ms-description",
   "version": "1.0.0",
+  "homepage": "https://github.com/johndoeinvest/express-router-ms-description",
   "description": "Import and create Express routes from a route description format",
   "main": "src/index.js",
   "scripts": {
@@ -9,7 +10,10 @@
   "peerDependencies": {
     "express": "4.x.x"
   },
-  "author": "",
+  "author": {
+    "name": "Henrik Olsson",
+    "email": "henrikolsson@outlook.com"
+  },
   "license": "ISC",
   "devDependencies": {
     "mocha": "^5.2.0",
