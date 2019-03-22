@@ -78,7 +78,7 @@ function parameterCheckHandler (params) {
     if (typeof params === 'object') {
       for (const param of Object.keys(params)) {
         const requestParams = req.method === 'GET' ? req.query : req.body
-        if (!requestParams[param]) {
+        if (requestParams[param] === undefined) {
           res.send(500)
           return
         }

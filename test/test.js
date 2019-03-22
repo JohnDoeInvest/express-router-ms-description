@@ -68,11 +68,24 @@ describe('ExpressRouterMSDescription', function () {
         .expect(200, done)
     })
 
-    it('respond with 200, incorrect params', function (done) {
+    it('respond with 500, incorrect params', function (done) {
       request(app)
         .post('/authenticate/bankid/')
         .send({ test: 'hello' })
         .expect(500, done)
+    })
+
+    it('respond with 200, body param sent as false ', function (done) {
+      request(app)
+        .post('/authenticate/bankid/')
+        .send({ ssid: false })
+        .expect(200, done)
+    })
+
+    it('respond with 200, query param sent as false', function (done) {
+      request(app)
+        .get('/authenticate/bankid?test=false')
+        .expect(200, done)
     })
 
     it('respond with 404, wrong method', function (done) {
