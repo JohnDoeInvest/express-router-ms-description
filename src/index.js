@@ -76,10 +76,18 @@ function parse (restApiJson, allowedTypes, routeHandlers) {
 function parameterCheckHandler (params) {
   return (req, res, next) => {
     if (typeof params === 'object') {
-      for (const param of Object.keys(params)) {
+      for (const [param, def] of Object.entries(params)) {
+        if (typeof def !== 'object') {
+          throw new Error('RestAPI paramters was expected to be an object')
+        }
+
+        if (def.optional) {
+          continue
+        }
+
         const requestParams = req.method === 'GET' ? req.query : req.body
         if (requestParams[param] === undefined) {
-          res.send(500)
+          res.sendStatus(500)
           return
         }
       }

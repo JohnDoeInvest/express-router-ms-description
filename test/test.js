@@ -31,7 +31,7 @@ describe('ExpressRouterMSDescription', function () {
               handlingFunction: 'handleAuthenticate',
               description: 'Checks the SSID and then starts an authentication',
               parameters: {
-                ssid: 'string with Swedish social security number'
+                ssid: { description: 'string with Swedish social security number' }
               }
             },
             {
@@ -40,7 +40,21 @@ describe('ExpressRouterMSDescription', function () {
               handlingFunction: 'getAuthentication',
               description: 'Gets something',
               parameters: {
-                test: 'some test param'
+                test: { description: 'some test param' }
+              }
+            }
+          ],
+          '/optional': [
+            {
+              method: 'POST',
+              type: 'CLIENT',
+              handlingFunction: 'handleAuthenticate',
+              description: 'Checks the SSID and then starts an authentication',
+              parameters: {
+                optionalValue: {
+                  description: 'A value which is optional',
+                  optional: true
+                }
               }
             }
           ]
@@ -99,6 +113,19 @@ describe('ExpressRouterMSDescription', function () {
         .get('/authenticate/bankid/test')
         .expect(404, done)
     })
+
+    it('respond with 200, optional missing', function (done) {
+      request(app)
+        .post('/authenticate/bankid/optional')
+        .expect(200, done)
+    })
+
+    it('respond with 200, optional used', function (done) {
+      request(app)
+        .post('/authenticate/bankid/optional')
+        .send({ optionalValue: 'Hello' })
+        .expect(200, done)
+    })
   })
 
   describe('Multiple routers', function () {
@@ -114,7 +141,7 @@ describe('ExpressRouterMSDescription', function () {
               handlingFunction: 'handleAuthenticate',
               description: 'Checks the SSID and then starts an authentication',
               parameters: {
-                ssid: 'string with Swedish social security number'
+                ssid: { description: 'string with Swedish social security number' }
               }
             },
             {
@@ -170,7 +197,7 @@ describe('ExpressRouterMSDescription', function () {
                 handlingFunction: 'handleAuthenticate',
                 description: 'Checks the SSID and then starts an authentication',
                 parameters: {
-                  ssid: 'string with Swedish social security number'
+                  ssid: { description: 'string with Swedish social security number' }
                 }
               }
             ]
@@ -232,7 +259,7 @@ describe('ExpressRouterMSDescription', function () {
                 handlingFunction: 'handleAuthenticate',
                 description: 'Checks the SSID and then starts an authentication',
                 parameters: {
-                  ssid: 'string with Swedish social security number'
+                  ssid: { description: 'string with Swedish social security number' }
                 }
               }
             ]
