@@ -1,6 +1,6 @@
 {
   "name": "express-router-ms-description",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "homepage": "https://github.com/johndoeinvest/express-router-ms-description",
   "description": "Import and create Express routes from a route description format",
   "main": "src/index.js",
