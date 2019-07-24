@@ -126,6 +126,13 @@ describe('ExpressRouterMSDescription', function () {
         .send({ optionalValue: 'Hello' })
         .expect(200, done)
     })
+
+    it('respond with 500, unknown params used', function (done) {
+      request(app)
+        .post('/authenticate/bankid')
+        .send({ ssid: 'Test', someParamNotAllowed: 'Hello' })
+        .expect(500, done)
+    })
   })
 
   describe('Multiple routers', function () {
