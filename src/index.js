@@ -35,19 +35,19 @@ function parse (restApiJson, allowedTypes, routeHandlers) {
   }
 
   for (var key in restApiJson.endpoints) {
-    if (!restApiJson.endpoints.hasOwnProperty(key)) {
+    if (!Object.prototype.hasOwnProperty.call(restApiJson.endpoints, key)) {
       continue
     }
 
     const methods = restApiJson.endpoints[key]
     for (const method of methods) {
       // TODO: Since we have method.parameters we could do some nice things like check that is exists in the request.
-      if (!routers.hasOwnProperty(method.type)) {
+      if (!Object.prototype.hasOwnProperty.call(routers, method.type)) {
         console.warn('Type not valid for endpoint with method ' + method.method + ' and URI ' + restApiJson.pathPrefix + key)
         continue
       }
 
-      if (!routeHandlers.hasOwnProperty(method.handlingFunction)) {
+      if (!Object.prototype.hasOwnProperty.call(routeHandlers, method.handlingFunction)) {
         console.warn("Can't find handler function '" + method.handlingFunction + "' for endpoint with method " + method.method + ' and URI ' + restApiJson.pathPrefix + key)
         continue
       }
