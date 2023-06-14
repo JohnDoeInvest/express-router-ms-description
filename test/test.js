@@ -6,7 +6,7 @@ const request = require('supertest')
 
 const ALLOWED_TYPES = ['CLIENT', 'ADMIN', 'EXTERNAL']
 
-var assert = require('assert')
+const assert = require('assert')
 describe('ExpressRouterMSDescription', function () {
   function createExpress () {
     const app = express()

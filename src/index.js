@@ -34,7 +34,7 @@ function parse (restApiJson, allowedTypes, routeHandlers) {
     routers[allowedType] = express.Router()
   }
 
-  for (var key in restApiJson.endpoints) {
+  for (const key in restApiJson.endpoints) {
     if (!Object.prototype.hasOwnProperty.call(restApiJson.endpoints, key)) {
       continue
     }
